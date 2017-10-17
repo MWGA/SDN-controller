@@ -3,5 +3,5 @@
 language: java
 
 jdk:
- - oraclejdk7
- - openjdk7
+ - oraclejdk8
+# - openjdk8 does not appear to be an option as of 04/29/16
