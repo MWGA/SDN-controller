@@ -4,7 +4,8 @@ Floodlight OpenFlow Controller (OSS)
 Build Status:
 -------------
 
-[![Build Status](https://travis-ci.org/floodlight/floodlight.svg?branch=master)](https://travis-ci.org/floodlight/floodlight)
+[![Build Status](https://travis-ci.org/mwga/floodlight.svg?branch=master)](https://travis-ci.org/mwga/floodlight)
+[![Zenhub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.com)
 
 Floodlight Wiki
 ---------------
