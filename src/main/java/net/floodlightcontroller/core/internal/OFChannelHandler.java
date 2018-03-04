@@ -34,6 +34,8 @@ import org.projectfloodlight.openflow.protocol.OFFactories;
 import org.projectfloodlight.openflow.protocol.OFFactory;
 import org.projectfloodlight.openflow.protocol.OFFeaturesReply;
 import org.projectfloodlight.openflow.protocol.OFFeaturesRequest;
+import org.projectfloodlight.openflow.protocol.OFFiitControllerRole;
+import org.projectfloodlight.openflow.protocol.OFFiitControllerRoleRequest;
 import org.projectfloodlight.openflow.protocol.OFHello;
 import org.projectfloodlight.openflow.protocol.OFHelloElem;
 import org.projectfloodlight.openflow.protocol.OFHelloElemVersionbitmap;
@@ -41,6 +43,7 @@ import org.projectfloodlight.openflow.protocol.OFMessage;
 import org.projectfloodlight.openflow.protocol.OFPortStatus;
 import org.projectfloodlight.openflow.protocol.OFType;
 import org.projectfloodlight.openflow.protocol.OFVersion;
+import org.projectfloodlight.openflow.protocol.ver10.OFFactoryVer10;
 import org.projectfloodlight.openflow.protocol.ver13.OFHelloElemTypeSerializerVer13;
 import org.projectfloodlight.openflow.protocol.ver14.OFHelloElemTypeSerializerVer14;
 import org.projectfloodlight.openflow.types.OFAuxId;
@@ -248,12 +251,16 @@ class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> 
 				switch(m.getType()) {
 				case HELLO:
 					processOFHello((OFHello)m);
+					System.out.println("predodoslanim request");
+					sendFIITRequest();
 					break;
 				case ERROR:
 					processOFError((OFErrorMsg)m);
 					break;
 				case FEATURES_REPLY:
 					processOFFeaturesReply((OFFeaturesReply)m);
+					System.out.println("predodoslanim request");
+					sendFIITRequest();
 					break;
 				case EXPERIMENTER:
 					processOFExperimenter((OFExperimenter)m);
@@ -261,9 +268,13 @@ class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> 
 					/* echos can be sent at any time */
 				case ECHO_REPLY:
 					processOFEchoReply((OFEchoReply)m);
+					System.out.println("predodoslanim request");
+					sendFIITRequest();
 					break;
 				case ECHO_REQUEST:
 					processOFEchoRequest((OFEchoRequest)m);
+					System.out.println("predodoslanim request");
+					sendFIITRequest();
 					break;
 				case PORT_STATUS:
 					processOFPortStatus((OFPortStatus)m);
@@ -790,6 +801,20 @@ class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> 
 		write(m);
 	}
 
+	private void sendFIITRequest() throws IOException {
+		// Send initial Features Request
+		OFFactoryVer10 factory1 = new OFFactoryVer10();
+		
+		
+		
+		OFFiitControllerRoleRequest m = factory1.buildFiitControllerRoleRequest()
+				.setXid(666)
+				.setRole(OFFiitControllerRole.ROLE_SLAVE)
+				.build();
+		write(m);
+	}
+
+	
 	/**
 	 * Send a hello message to the switch using the handshake transactions ids.
 	 * @throws IOException
