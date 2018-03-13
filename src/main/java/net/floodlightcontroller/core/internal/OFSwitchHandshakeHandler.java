@@ -1762,7 +1762,7 @@ public class OFSwitchHandshakeHandler implements IOFConnectionListener {
 	}
 
 	protected void sendPortDescRequest() {
-		mainConnection.write(factory.portDescStatsRequest(ImmutableSet.<OFStatsRequestFlags>of()));
+		mainConnection.write(factory.buildPortDescStatsRequest().build());//.portDescStatsRequest(ImmutableSet.<OFStatsRequestFlags>of()));
 	}
 
 	/**
