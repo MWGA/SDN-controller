@@ -1,6 +1,6 @@
 package net.floodlightcontroller.core.internal;
 
-import java.io.IOException;
+import java.io.IOException;  
 import java.nio.channels.ClosedChannelException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,10 +44,17 @@ import org.projectfloodlight.openflow.protocol.OFVersion;
 import org.projectfloodlight.openflow.protocol.ver13.OFHelloElemTypeSerializerVer13;
 import org.projectfloodlight.openflow.protocol.ver14.OFHelloElemTypeSerializerVer14;
 import org.projectfloodlight.openflow.types.OFAuxId;
+import org.projectfloodlight.openflow.types.U128;
 import org.projectfloodlight.openflow.types.U32;
 import org.projectfloodlight.openflow.types.U64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.projectfloodlight.openflow.protocol.OFAddVapContextMsg;
+import org.projectfloodlight.openflow.protocol.OFAssociationInformationMsg;
+import org.projectfloodlight.openflow.protocol.OFConfigurationMsg;
+import org.projectfloodlight.openflow.protocol.OFProbeInformationMsg;
+import org.projectfloodlight.openflow.protocol.OFRemoveVapContextMsg;
 
 import com.google.common.base.Preconditions;
 
@@ -56,7 +63,7 @@ import com.google.common.base.Preconditions;
  *  messages to the higher orders of control.
  * @author Jason Parraga <Jason.Parraga@Bigswitch.com>
  */
-class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> {
+public class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> {
 
 	private static final Logger log = LoggerFactory.getLogger(OFChannelHandler.class);
 
@@ -112,7 +119,29 @@ class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> 
 			logErrorDisconnect(m); 
 		}
 
+		
+		
+		// TODO:
 		void processOFExperimenter(OFExperimenter m) {
+			
+			if(m.getExperimenter() == 5) {
+//				if(m.getSubtype == 0)) {
+//					processConfigurationMessage();
+//				}
+//				if(m.getSubtype == 1)) {
+//					processProbeInfoMessage();
+//				}
+//				if(m.getSubtype == 2)) {
+//					processAssociationInfoMessage();
+//				}
+//				if(m.getSubtype == 4)) {
+//					processAddVapContextMessage();
+//				}
+//				if(m.getSubtype == 5)) {
+//					processRemoveVapContextMessage();
+//				}
+			}
+			
 			unhandledMessageReceived(m);
 		}
 
@@ -195,7 +224,7 @@ class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> 
 				String msg = getSwitchStateMessage(m,
 						"Ignoring unexpected message");
 				log.debug(msg);
-			}
+			}	
 		}
 
 		/**
@@ -831,6 +860,100 @@ class OFChannelHandler extends SimpleChannelInboundHandler<Iterable<OFMessage>> 
 				.build();
 		write(reply);
 	}
+	
+	//  CUSTOM MESSAGES --------------------------------------------------------------------------------------------------------
+	
+		// custom configuration message
+		private void sendConfigurationMessage(short channel, short length_ssid, U64 ssid) {
+			
+			OFConfigurationMsg msg = factory.buildConfigurationMsg()
+					.setXid(handshakeTransactionIds--)
+					.setChannel(channel)
+					.setLengthSsid(length_ssid)
+					.setSSID(ssid)
+					.build();
+
+			/* Record for latency calculation */
+			echoSendTime = System.currentTimeMillis();
+			write(msg);
+		}
+		
+		// custom probe info message
+		private void sendProbeInfoMessage(U64 mac_sta) {
+			
+			OFProbeInformationMsg msg = factory.buildProbeInformationMsg()
+					.setXid(handshakeTransactionIds--)
+					.setMACSta(mac_sta)
+					.build();
+
+			/* Record for latency calculation */
+			echoSendTime = System.currentTimeMillis();
+			write(msg);
+		}
+
+		// custom association info message
+		private void sendAssociationInfoMessage(U64 mac_sta, int status_code) {
+			
+			OFAssociationInformationMsg msg = factory.buildAssociationInformationMsg()
+					.setXid(handshakeTransactionIds--)
+					.setMACSta(mac_sta)
+					.setSTATUSCode(status_code)
+					.build();
+
+			/* Record for latency calculation */
+			echoSendTime = System.currentTimeMillis();
+			write(msg);
+		}
+		
+		// custom association info message
+		private void sendAddVapContextMessage(U64 bssid, long ip_sta, short length_ssid, U64 mac_sta, U128 ssid) {
+			
+			OFAddVapContextMsg msg = factory.buildAddVapContextMsg()
+					.setXid(handshakeTransactionIds--)
+					.setBSSID(bssid)
+					.setIPSta(ip_sta)
+					.setLengthSsid(length_ssid)
+					.setMACSta(mac_sta)
+					.setSSID(ssid)
+					.build();
+
+			/* Record for latency calculation */
+			echoSendTime = System.currentTimeMillis();
+			write(msg);
+		}
+		
+		// custom association info message
+		private void sendRemoveVapContextMessage(U64 bssid, U64 mac_sta) {
+			
+			OFRemoveVapContextMsg msg = factory.buildRemoveVapContextMsg()
+					.setXid(handshakeTransactionIds--)
+					.setBSSID(bssid)
+					.setMACSta(mac_sta)
+					.build();
+
+			/* Record for latency calculation */
+			echoSendTime = System.currentTimeMillis();
+			write(msg);
+		}
+		
+	// PROCESS CUSTOM MESSAGES
+
+		private void processConfigurationMessage() {
+			
+		}
+		private void processProbeInfoMessage() {
+			
+		}
+		private void processAssociationInfoMessage() {
+			
+		}
+		private void processAddVapContextMessage() {
+			
+		}
+		private void processRemoveVapContextMessage() {
+			
+		}
+		
 	
 	private void write(OFMessage m) {
 		channel.writeAndFlush(Collections.singletonList(m));

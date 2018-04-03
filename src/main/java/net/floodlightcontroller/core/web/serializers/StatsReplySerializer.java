@@ -18,6 +18,7 @@
 package net.floodlightcontroller.core.web.serializers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -323,7 +324,7 @@ public class StatsReplySerializer extends JsonSerializer<StatsReply> {
 
 		jGen.writeFieldName("groupFeatures");
 		jGen.writeStartObject();                        
-		jGen.writeNumberField("capabilities",groupFeaturesReply.getCapabilities());                                                              
+		jGen.writeNumberField("capabilities",(BigDecimal) groupFeaturesReply.getCapabilities());                                                              
 		jGen.writeNumberField("maxGroupsAll",groupFeaturesReply.getMaxGroupsAll());
 		jGen.writeNumberField("maxGroupsSelect",groupFeaturesReply.getMaxGroupsSelect());
 		jGen.writeNumberField("maxGroupsIndirect",groupFeaturesReply.getMaxGroupsIndirect());
@@ -413,7 +414,7 @@ public class StatsReplySerializer extends JsonSerializer<StatsReply> {
 		for (OFMeterConfig config : meterConfigReply.getEntries()) {
 			jGen.writeStartObject();
 			jGen.writeNumberField("meterId", config.getMeterId());
-			jGen.writeNumberField("flags", config.getFlags());
+			jGen.writeNumberField("flags", (BigDecimal) config.getFlags());
 			jGen.writeFieldName("meterBands");
 			jGen.writeStartArray();
 			for (OFMeterBand band : config.getEntries()) {
