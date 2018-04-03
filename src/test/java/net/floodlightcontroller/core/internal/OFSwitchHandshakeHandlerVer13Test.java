@@ -23,6 +23,7 @@ import net.floodlightcontroller.core.internal.OFSwitchHandshakeHandler.WaitAppHa
 import net.floodlightcontroller.core.internal.OFSwitchHandshakeHandler.WaitTableFeaturesReplyState;
 
 import org.projectfloodlight.openflow.protocol.OFCapabilities;
+import org.projectfloodlight.openflow.protocol.OFConfigurationMsg;
 import org.projectfloodlight.openflow.protocol.OFControllerRole;
 import org.projectfloodlight.openflow.protocol.OFDescStatsReply;
 import org.projectfloodlight.openflow.protocol.OFFactories;
@@ -32,6 +33,7 @@ import org.projectfloodlight.openflow.protocol.OFMessage;
 import org.projectfloodlight.openflow.protocol.OFPortDesc;
 import org.projectfloodlight.openflow.protocol.OFPortDescStatsReply;
 import org.projectfloodlight.openflow.protocol.OFPortDescStatsRequest;
+import org.projectfloodlight.openflow.protocol.OFProbeInformationMsg;
 import org.projectfloodlight.openflow.protocol.OFRoleReply;
 import org.projectfloodlight.openflow.protocol.OFRoleRequest;
 import org.projectfloodlight.openflow.protocol.OFTableFeaturesStatsReply;
@@ -40,6 +42,7 @@ import org.projectfloodlight.openflow.protocol.OFVersion;
 import org.projectfloodlight.openflow.types.DatapathId;
 import org.projectfloodlight.openflow.types.OFAuxId;
 import org.projectfloodlight.openflow.types.OFPort;
+import org.projectfloodlight.openflow.types.U64;
 
 import com.google.common.collect.ImmutableList;
 
@@ -79,6 +82,7 @@ public class OFSwitchHandshakeHandlerVer13Test extends OFSwitchHandlerTestBase {
      */
     @Test
     public void moveToWaitPortDescStatsReply() throws Exception {
+    	    	
         testInitState();
 
         switchHandler.beginHandshake();
@@ -187,7 +191,7 @@ public class OFSwitchHandshakeHandlerVer13Test extends OFSwitchHandlerTestBase {
                 .build();
         return roleReply;
     }
-
+   
     @Override
     @Test
     public void moveToWaitInitialRole() throws Exception {

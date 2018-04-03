@@ -674,27 +674,28 @@ implements IOFSwitchListener, IFloodlightModule, IStaticFlowEntryPusherService, 
 		 * never expire.
 		 */
 		if (AppCookie.extractApp(cookie) == STATIC_FLOW_APP_ID) {
-			OFFlowRemovedReason reason = null;
-			switch (msg.getVersion()) {
-			case OF_10:
-				reason = OFFlowRemovedReasonSerializerVer10.ofWireValue((byte) msg.getReason());
-				break;
-			case OF_11:
-				reason = OFFlowRemovedReasonSerializerVer11.ofWireValue((byte) msg.getReason());
-				break;
-			case OF_12:
-				reason = OFFlowRemovedReasonSerializerVer12.ofWireValue((byte) msg.getReason());
-				break;
-			case OF_13:
-				reason = OFFlowRemovedReasonSerializerVer13.ofWireValue((byte) msg.getReason());
-				break;
-			case OF_14:
-				reason = OFFlowRemovedReasonSerializerVer14.ofWireValue((byte) msg.getReason());
-				break;
-			default:
-				log.debug("OpenFlow version {} unsupported for OFFlowRemovedReasonSerializerVerXX", msg.getVersion());
-				break;
-			}
+			OFFlowRemovedReason reason =  msg.getReason();
+
+//			switch (msg.getVersion()) {
+//			case OF_10:
+//				reason = OFFlowRemovedReasonSerializerVer10.toWireValue(msg.getReason());
+//				break;
+//			case OF_11:
+//				reason = OFFlowRemovedReasonSerializerVer11.toWireValue(msg.getReason());
+//				break;
+//			case OF_12:
+//				reason = OFFlowRemovedReasonSerializerVer12.toWireValue(msg.getReason());
+//				break;
+//			case OF_13:
+//				reason = OFFlowRemovedReasonSerializerVer13.ofWireValue((byte) msg.getReason());
+//				break;
+//			case OF_14:
+//				reason = OFFlowRemovedReasonSerializerVer14.ofWireValue((byte) msg.getReason());
+//				break;
+//			default:
+//				log.debug("OpenFlow version {} unsupported for OFFlowRemovedReasonSerializerVerXX", msg.getVersion());
+//				break;
+//			}
 			if (reason != null) {
 				if (OFFlowRemovedReason.DELETE == reason) {
 					log.error("Got a FlowRemove message for a infinite " + 

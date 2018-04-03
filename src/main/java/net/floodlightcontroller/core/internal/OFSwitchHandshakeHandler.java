@@ -914,7 +914,7 @@ public class OFSwitchHandshakeHandler implements IOFConnectionListener {
 
 		@Override
 		void enterState(){
-			sendPortDescRequest();
+			//sendPortDescRequest();
 		}
 
 		@Override
@@ -1761,9 +1761,9 @@ public class OFSwitchHandshakeHandler implements IOFConnectionListener {
 		mainConnection.write(msgList);
 	}
 
-	protected void sendPortDescRequest() {
-		mainConnection.write(factory.portDescStatsRequest(ImmutableSet.<OFStatsRequestFlags>of()));
-	}
+//	protected void sendPortDescRequest() {
+//		mainConnection.write(factory.portDescStatsRequest(ImmutableSet.<OFStatsRequestFlags>of()));
+//	}
 
 	/**
 	 * send a description state request
